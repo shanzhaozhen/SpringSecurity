@@ -42,7 +42,7 @@ public class MyUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("账号不存在");
         } else {
             //将数据库保存的权限存至登陆的账号里面
-            Set<SysPermission> sysPermissions = sysPermissionRepository.findSysPermissionsByUsername(username);
+            Set<SysPermission> sysPermissions = sysPermissionRepository.findByUsername(username);
             if (sysPermissions != null) {
                 Set<GrantedAuthority> grantedAuthorities = new HashSet<GrantedAuthority>();
                 for (SysPermission sysPermission : sysPermissions) {

@@ -67,9 +67,16 @@ public class MyFilterInvocationSecurityMetadataSource implements FilterInvocatio
 
         }
         /*
-        Collection<ConfigAttribute> nullPermission = new ArrayList<ConfigAttribute>();
-        nullPermission.add(new SecurityConfig("无相应权限"));
-        return nullPermission;
+            Collection<ConfigAttribute> nullPermission = new ArrayList<ConfigAttribute>();
+            nullPermission.add(new SecurityConfig("无相应权限"));
+            return nullPermission;
+
+            //防止数据库中没有数据，不能进行权限拦截
+            if(collection.size()<1) {
+                ConfigAttribute configAttribute = new SecurityConfig("ROLE_NO_USER");
+                collection.add(configAttribute);
+            }
+            return collection;
          */
         return null;
     }

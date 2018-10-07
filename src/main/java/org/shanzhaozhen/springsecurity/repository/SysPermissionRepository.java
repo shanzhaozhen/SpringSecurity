@@ -11,14 +11,14 @@ public interface SysPermissionRepository extends JpaRepository<SysPermission, In
 
     public List<SysPermission> findAll();
 
-    @Query("select p.* " +
+    @Query(value = "select p.* " +
             "from sys_user u " +
             "left join sys_user_role sur on u.id = sur.user_id " +
             "left join sys_role r on r.id = sur.role_id " +
             "left join sys_role_permission srp on r.id = srp.role_id " +
             "left join sys_permission p on p.id = srp.permission_id " +
-            "where u.username = ?1")
-    public Set<SysPermission> findSysPermissionsByUsername(String username);
+            "where u.username = ?1", nativeQuery = true)
+    public Set<SysPermission> findByUsername(String username);
 
 //    public Set<SysPermission> findSysPermissionsByRoleId(Integer roleId);
 
