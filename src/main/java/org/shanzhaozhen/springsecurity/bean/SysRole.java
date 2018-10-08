@@ -5,7 +5,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "sys_role")
-public class SysRole {
+public class SysRole extends BaseBean {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "sys_user")
-public class SysUser implements UserDetails {
+public class SysUser extends BaseBean implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
