@@ -11,7 +11,7 @@
   <!-- Font Awesome -->
   <link rel="stylesheet" href="/webjars/font-awesome/4.7.0/css/font-awesome.min.css">
   <!-- Ionicons -->
-  <link rel="stylesheet" href="/webjars/ionicons/2.0.0/css/ionicons.min.css">
+  <link rel="stylesheet" href="/webjars/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="/webjars/AdminLTE/2.4.3/dist/css/AdminLTE.min.css">
   <!-- iCheck -->
@@ -38,11 +38,11 @@
 
     <form th:action="@{/login}" method="post">
       <div class="form-group has-feedback">
-        <input type="text" name="username" class="form-control" placeholder="用户名">
+        <input type="text" name="username" class="form-control" placeholder="用户名" required>
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input type="password" name="password" class="form-control" placeholder="密码">
+        <input type="password" name="password" class="form-control" placeholder="密码" required>
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
@@ -60,6 +60,8 @@
         <!-- /.col -->
       </div>
     </form>
+    <a href="#">忘记密码</a><br>
+    <a th:href="@{/register}" clas/s="text-center">没有账号？注册一个</a>
 
   </div>
   <!-- /.login-box-body -->
