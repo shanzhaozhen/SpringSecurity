@@ -24,16 +24,16 @@ public class SysUser extends BaseBean implements UserDetails {
     private Set<GrantedAuthority> authorities;
 
     @Column(nullable = false)
-    private boolean accountNonExpired;
+    private boolean accountNonExpired;          //账户是否过期,过期无法验证
 
     @Column(nullable = false)
-    private boolean accountNonLocked;
+    private boolean accountNonLocked;           //指定用户是否被锁定或者解锁,锁定的用户无法进行身份验证
 
     @Column(nullable = false)
-    private boolean credentialsNonExpired;
+    private boolean credentialsNonExpired;      //指示是否已过期的用户的凭据(密码),过期的凭据防止认证
 
     @Column(nullable = false)
-    private boolean enabled;
+    private boolean enabled;                    //是否被禁用,禁用的用户不能身份验证
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(name = "sys_user_role",
