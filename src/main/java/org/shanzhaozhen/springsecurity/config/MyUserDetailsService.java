@@ -4,16 +4,18 @@ import org.shanzhaozhen.springsecurity.bean.SysPermission;
 import org.shanzhaozhen.springsecurity.bean.SysUser;
 import org.shanzhaozhen.springsecurity.repository.SysPermissionRepository;
 import org.shanzhaozhen.springsecurity.repository.SysUserRepository;
+import org.shanzhaozhen.springsecurity.utils.NullUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -35,14 +37,18 @@ public class MyUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         SysUser sysUser = sysUserRepository.findByUsername(username);
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        sysUser.setPassword(encoder.encode("123456"));
-
         if (sysUser == null) {
-            throw new UsernameNotFoundException("账号不存在");
+            /**
+             * 在这里会继续捕获到UsernameNotFoundException异常。
+             * 由于hideUserNotFoundExceptions的值为true，所以这里会new一个新的BadCredentialsException异常抛出来，那么最后捕获到并放入session中的就是这个BadCredentialsException异常。
+             * 所以我们在页面始终无法捕获我们自定义的异常信息。
+             */
+            throw new BadCredentialsException("账号不存在");
         } else {
             //将数据库保存的权限存至登陆的账号里面
-            Set<SysPermission> sysPermissions = sysPermissionRepository.findByUsername(username);
+            List<SysPermission> sysPermissions = null;
+            sysPermissions = sysPermissionRepository.findByUsername(username);
+            NullUtils.clearNull(sysPermissions);
             if (sysPermissions != null) {
                 Set<GrantedAuthority> grantedAuthorities = new HashSet<GrantedAuthority>();
                 for (SysPermission sysPermission : sysPermissions) {
@@ -53,6 +59,7 @@ public class MyUserDetailsService implements UserDetailsService {
         }
 
         return sysUser;
+
     }
 
 }
