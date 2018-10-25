@@ -92,6 +92,26 @@
             <version>2.4.3</version>
         </dependency>
 
+        <!--引入jquery的validation表单验证包-->
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>jquery-validation</artifactId>
+            <version>1.18.0</version>
+        </dependency>
+
+        <!--引入layer模态框-->
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>layer</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrapvalidator</artifactId>
+            <version>0.5.3</version>
+        </dependency>
+
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>font-awesome</artifactId>
