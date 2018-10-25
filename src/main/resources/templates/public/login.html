@@ -7,15 +7,15 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
-  <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="/webjars/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.min.css}">
   <!-- Ionicons -->
-  <link rel="stylesheet" href="/webjars/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" th:href="@{/webjars/ionicons/2.0.1/css/ionicons.min.css}">
   <!-- Theme style -->
-  <link rel="stylesheet" href="/webjars/AdminLTE/2.4.3/dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" th:href="@{/webjars/AdminLTE/2.4.3/dist/css/AdminLTE.min.css}">
   <!-- iCheck -->
-  <link rel="stylesheet" href="/webjars/AdminLTE/2.4.3/plugins/iCheck/square/blue.css">
+  <link rel="stylesheet" th:href="@{/webjars/AdminLTE/2.4.3/plugins/iCheck/square/blue.css}">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -35,7 +35,7 @@
   <!-- /.login-logo -->
   <div class="login-box-body">
     <p class="login-box-msg">Sign in to start your session</p>
-
+    <p class="login-box-msg text-red" th:if="${param.error}" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}"></p>
     <form th:action="@{/login}" method="post">
       <div class="form-group has-feedback">
         <input type="text" name="username" class="form-control" placeholder="用户名" required>
@@ -61,7 +61,7 @@
       </div>
     </form>
     <a href="#">忘记密码</a><br>
-    <a th:href="@{/register}" clas/s="text-center">没有账号？注册一个</a>
+    <a th:href="@{/register}" class="text-center">没有账号？注册一个</a>
 
   </div>
   <!-- /.login-box-body -->
@@ -69,11 +69,11 @@
 <!-- /.login-box -->
 
 <!-- jQuery 3 -->
-<script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
+<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
 <!-- Bootstrap 3.3.7 -->
-<script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
 <!-- iCheck -->
-<script src="/webjars/AdminLTE/2.4.3/plugins/iCheck/icheck.min.js"></script>
+<script th:src="@{/webjars/AdminLTE/2.4.3/plugins/iCheck/icheck.min.js}"></script>
 <script>
   $(function () {
     $('input').iCheck({

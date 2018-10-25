@@ -7,4 +7,6 @@ public interface SysUserRepository extends JpaRepository<SysUser, Integer> {
 
     SysUser findByUsername(String username);
 
+    int countByUsername(String username);
+
 }

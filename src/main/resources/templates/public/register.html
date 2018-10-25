@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,15 +7,17 @@
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
-  <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}">
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="/webjars/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.min.css}">
   <!-- Ionicons -->
-  <link rel="stylesheet" href="/webjars/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" th:href="@{/webjars/ionicons/2.0.1/css/ionicons.min.css}">
   <!-- Theme style -->
-  <link rel="stylesheet" href="/webjars/AdminLTE/2.4.3/dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" th:href="@{/webjars/AdminLTE/2.4.3/dist/css/AdminLTE.min.css}">
   <!-- iCheck -->
-  <link rel="stylesheet" href="/webjars/AdminLTE/2.4.3/plugins/iCheck/square/blue.css">
+  <link rel="stylesheet" th:href="@{/webjars/AdminLTE/2.4.3/plugins/iCheck/square/blue.css}">
+  <!-- bootstrapvalidator 0.5.3 -->
+  <link rel="stylesheet" th:href="@{/webjars/bootstrapvalidator/0.5.3/css/bootstrapValidator.min.css}">
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -36,18 +38,18 @@
   <div class="register-box-body">
     <p class="login-box-msg">Register a new membership</p>
 
-    <form action="/register" method="post">
+    <form>
       <div class="form-group has-feedback">
-        <input type="text" class="form-control" name="username" placeholder="用户名">
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
+        <input id="username" type="text" class="form-control" name="username" placeholder="用户名" required>
       </div>
       <div class="form-group has-feedback">
-        <input type="password" class="form-control" placeholder="密码">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        <input id="password" type="password" class="form-control" name="password" placeholder="密码" required>
       </div>
       <div class="form-group has-feedback">
-        <input type="password" class="form-control" name="password" placeholder="再输入一次密码">
         <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+        <input type="password" class="form-control" name="retype_password" placeholder="再输入一次密码" required>
       </div>
       <div class="row">
         <div class="col-xs-offset-8 col-xs-4">
@@ -57,26 +59,131 @@
       </div>
     </form>
 
-    <a href="/login" class="text-center">已有账号</a>
+    <a th:href="@{/login}" class="text-center">已有账号</a>
   </div>
   <!-- /.form-box -->
 </div>
 <!-- /.register-box -->
 
 <!-- jQuery 3 -->
-<script src="/webjars/jquery/3.3.1/jquery.min.js"></script>
+<script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
 <!-- Bootstrap 3.3.7 -->
-<script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
 <!-- iCheck -->
-<script src="/webjars/AdminLTE/2.4.3/plugins/iCheck/icheck.min.js"></script>
+<script th:src="@{/webjars/AdminLTE/2.4.3/plugins/iCheck/icheck.min.js}"></script>
+<!-- Bootstrap-Validator 0.5.3 -->
+<script th:src="@{/webjars/bootstrapvalidator/0.5.3/js/bootstrapValidator.min.js}"></script>
+<script th:src="@{/webjars/bootstrapvalidator/0.5.3/js/language/zh_CN.js}"></script>
+<!-- layer 3.1.1 -->
+<script th:src="@{/webjars/layer/3.1.1/dist/layer.js}"></script>
+
 <script>
-  $(function () {
-    $('input').iCheck({
-      checkboxClass: 'icheckbox_square-blue',
-      radioClass: 'iradio_square-blue',
-      increaseArea: '20%' /* optional */
+    $(function () {
+
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' /* optional */
+        });
+
     });
-  });
+
+    $('form').bootstrapValidator({
+        message: 'This value is not valid',
+        // feedbackIcons: {        //提示图标
+        //     valid: 'glyphicon glyphicon-ok',
+        //     invalid: 'glyphicon glyphicon-remove',
+        //     validating: 'glyphicon glyphicon-refresh'
+        // },
+        fields: {
+            username: {
+                message: '用户名验证失败',
+                validators: {
+                    notEmpty: {
+                        message: '用户名不能为空'
+                    },
+                    stringLength: {
+                        min: 5,
+                        max: 18
+                    },
+                    regexp: {
+                        regexp: /^[a-zA-Z0-9_\.]+$/,
+                        message: '用户名由数字字母下划线和.组成'
+                    },
+                    remote: {
+                        url: '[[@{/register/checkUsername}]]',
+                        type: 'POST',
+                        dataType:"json",
+                        data: {
+                            username: $('input[name="username"]').val(),
+                            '[[${_csrf.parameterName}]]': '[[${_csrf.token}]]'
+                        },
+                        message: '用户名已被占用',
+                        delay:2000          //这里特别要说明，必须要加此属性，否则用户输入一个字就会访问后台一次，会消耗大量的系统资源,
+                        // data : '',          //这里默认会传递该验证字段的值到后端
+                    }
+                }
+            },
+            password: {
+                validators: {
+                    notEmpty: {
+                        message: '密码不能为空'
+                    },
+                    stringLength: {
+                        min: 6,
+                        max: 30
+                    }
+                }
+            },
+            retype_password: {
+                validators: {
+                    notEmpty: {
+                        message: '重复密码不能为空'
+                    },
+                    stringLength: {
+                        min: 6,
+                        max: 30
+                    },
+                    identical: {//相同
+                        field: 'password',    //需要进行比较的input name值
+                        message: '两次密码不一致'
+                    },
+                    different: {//不能和用户名相同
+                        field: 'username',//需要进行比较的input name值
+                        message: '不能和用户名相同'
+                    }
+                }
+            }
+        }
+    }).on('success.form.bv', function(e) {
+        e.preventDefault();  //必须添加，不然就重复提交
+        console.log(e.target);
+        $.ajax({
+            url: '[[@{/register}]]',
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': "[[${_csrf.token}]]"
+            },
+            data: $(e.target).serialize(),
+            dataType: 'json',
+            success: function(result) {
+                layer.msg(result.msg);
+                setTimeout(function() {
+                    if (result.success == true) {
+                        location.href = '[[@{/login}]]';
+                    } else {
+                        location.reload(true);
+                    }
+                }, 1500);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                layer.message('错误（' + XMLHttpRequest.status + '）：' + textStatus);
+            }
+        });
+
+    });
+
+
 </script>
 </body>
 </html>
