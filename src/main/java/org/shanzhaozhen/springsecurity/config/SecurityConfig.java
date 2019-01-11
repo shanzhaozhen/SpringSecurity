@@ -14,7 +14,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private MyUserDetailsService myUserDetailsService;
 
     /**
-     *    定义认证规则
+     * 定义认证规则
      * antMatchers: 允许所有用户访问"/"和"/index.html"
      * anyRequest().authenticated(): 其他地址的访问均需验证权限
      * formLogin: 表单登陆
@@ -26,16 +26,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        super.configure(http);
         http
             .authorizeRequests()
-                .antMatchers("/", "/index1", "/index2", "/webjars/**").permitAll()
+                .antMatchers("/", "/test1", "/test2", "/login", "/register/**", "/webjars/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
                 .loginPage("/login")
-                .permitAll()
+//                .permitAll()
+                .defaultSuccessUrl("/admin/index")
+//                .failureUrl("login?error=true")
+//                .successHandler(new MySuccessHandler())
                 .and()
             .logout()
                 .logoutSuccessUrl("/")
                 .and()
+//                .csrf().disable()
             .rememberMe()
         ;
 

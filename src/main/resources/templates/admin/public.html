@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
 </head>
@@ -172,6 +172,7 @@
                 </ul>
             </div>
         </nav>
+
     </header>
 
     <!-- Left side column. contains the logo and sidebar -->
@@ -213,8 +214,8 @@
                 <li class="treeview">
                     <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
                         <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
+                            <i class="fa fa-angle-left pull-right"></i>
+                         </span>
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="#">Link in level 2</a></li>
@@ -225,6 +226,24 @@
             <!-- /.sidebar-menu -->
         </section>
         <!-- /.sidebar -->
+
+        <script>
+            $(function () {
+                $.ajax({
+                    url: '[[@{/admin/menu}]]',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': "[[${_csrf.token}]]"
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+
+                    }
+                });
+            });
+
+        </script>
+
     </aside>
 
     <!-- Main Footer -->
@@ -237,7 +256,7 @@
         <strong>Copyright &copy; 2016 <a href="#">Company</a>.</strong> All rights reserved.
     </footer>
 
-
+    <!--Control Sidebar-->
     <aside class="control-sidebar control-sidebar-dark" th:fragment="control-sidebar">
         <!-- Create the tabs -->
         <ul class="nav nav-tabs nav-justified control-sidebar-tabs">

@@ -1,7 +1,7 @@
 package org.shanzhaozhen.springsecurity.service.impl;
 
+import org.shanzhaozhen.springsecurity.admin.repository.SysUserRepository;
 import org.shanzhaozhen.springsecurity.bean.SysUser;
-import org.shanzhaozhen.springsecurity.repository.SysUserRepository;
 import org.shanzhaozhen.springsecurity.service.RegisterService;
 import org.shanzhaozhen.springsecurity.utils.MessageUtils;
 import org.shanzhaozhen.springsecurity.utils.NullUtils;
@@ -37,11 +37,11 @@ public class RegisterServiceImpl implements RegisterService {
         SysUser newUser = new SysUser();
         newUser.setUsername(sysUser.getUsername());
         newUser.setPassword(PasswordUtils.encryption(sysUser.getPassword()));
-        sysUser.setAccountNonExpired(false);
-        sysUser.setAccountNonLocked(true);
-        sysUser.setCredentialsNonExpired(true);
-        sysUser.setEnabled(true);
-        sysUserRepository.save(sysUser);
+        newUser.setAccountNonExpired(false);
+        newUser.setAccountNonLocked(true);
+        newUser.setCredentialsNonExpired(true);
+        newUser.setEnabled(true);
+        sysUserRepository.save(newUser);
         return MessageUtils.resultSuccessMessage("注册成功，等待管理员通过审核！");
     }
 

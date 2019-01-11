@@ -1,9 +1,9 @@
 package org.shanzhaozhen.springsecurity.config;
 
+import org.shanzhaozhen.springsecurity.admin.repository.SysPermissionRepository;
+import org.shanzhaozhen.springsecurity.admin.repository.SysUserRepository;
 import org.shanzhaozhen.springsecurity.bean.SysPermission;
 import org.shanzhaozhen.springsecurity.bean.SysUser;
-import org.shanzhaozhen.springsecurity.repository.SysPermissionRepository;
-import org.shanzhaozhen.springsecurity.repository.SysUserRepository;
 import org.shanzhaozhen.springsecurity.utils.NullUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -28,10 +28,12 @@ import java.util.Set;
 public class MyUserDetailsService implements UserDetailsService {
 
     @Autowired
-    SysUserRepository sysUserRepository;
+    private SysUserRepository sysUserRepository;
 
     @Autowired
-    SysPermissionRepository sysPermissionRepository;
+    private SysPermissionRepository sysPermissionRepository;
+
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

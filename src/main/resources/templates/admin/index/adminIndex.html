@@ -34,11 +34,11 @@
 <div class="wrapper">
 
   <!-- Main Header -->
-  <div th:replace="/admin/public :: header"></div>
+  <div th:replace="~{/admin/public :: header}"></div>
 
 
   <!-- Left side column. contains the logo and sidebar -->
-  <div th:replace="/admin/public :: left-sidebar"></div>
+  <div th:replace="~{/admin/public :: left-sidebar}"></div>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -60,17 +60,17 @@
       <!--------------------------
         | Your Page Content Here |
         -------------------------->
-
+      <h1>进入index2</h1>
     </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
 
   <!-- Main Footer -->
-  <div th:replace="/admin/public :: footer"></div>
+  <div th:replace="~{/admin/public :: footer}"></div>
 
   <!-- Control Sidebar -->
-  <div th:replace="/admin/public :: control-sidebar"></div>
+  <div th:replace="~{/admin/public :: control-sidebar}"></div>
   <!-- /.control-sidebar -->
 
   <!-- Add the sidebar's background. This div must be placed

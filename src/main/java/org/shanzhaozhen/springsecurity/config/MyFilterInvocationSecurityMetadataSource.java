@@ -1,7 +1,7 @@
 package org.shanzhaozhen.springsecurity.config;
 
+import org.shanzhaozhen.springsecurity.admin.repository.SysPermissionRepository;
 import org.shanzhaozhen.springsecurity.bean.SysPermission;
-import org.shanzhaozhen.springsecurity.repository.SysPermissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;

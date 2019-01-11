@@ -1,4 +1,4 @@
-package org.shanzhaozhen.springsecurity.repository;
+package org.shanzhaozhen.springsecurity.admin.repository;
 
 import org.shanzhaozhen.springsecurity.bean.SysRole;
 import org.springframework.data.jpa.repository.JpaRepository;
