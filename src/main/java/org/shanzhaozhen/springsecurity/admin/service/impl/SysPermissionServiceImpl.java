@@ -1,56 +1,126 @@
 package org.shanzhaozhen.springsecurity.admin.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.shanzhaozhen.springsecurity.admin.repository.SysPermissionRepository;
 import org.shanzhaozhen.springsecurity.admin.service.SysPermissionService;
 import org.shanzhaozhen.springsecurity.bean.SysPermission;
-import org.shanzhaozhen.springsecurity.param.MenuChild;
-import org.shanzhaozhen.springsecurity.param.MenuRoot;
+import org.shanzhaozhen.springsecurity.common.SystemConst.MenuType;
+import org.shanzhaozhen.springsecurity.utils.UserDetailsUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
+@Service
 public class SysPermissionServiceImpl implements SysPermissionService {
 
+    @Autowired
     private SysPermissionRepository sysPermissionRepository;
 
+    public List<SysPermission> getMenu() {
 
-    @Override
-    public void getSysPermissionByUserName() {
-        return;
-    }
+        List<String> actions = UserDetailsUtils.getActionsByLoginUser();
+        List<SysPermission> allMenus = this.sysPermissionRepository.findAll();
 
-
-    public void getMenu() {
-        List<SysPermission> list = sysPermissionRepository.findAll();
-
-        if (list == null) {
-            return;
-        }
-
-        List<MenuRoot> menuList = new ArrayList<>();
-        MenuRoot root = null;
-
-        for (SysPermission sysPermission : list) {
-            if (sysPermission.getPid() == null) {
-                root = new MenuRoot();
-                root.setId(sysPermission.getId());
-                root.setName(sysPermission.getDescription());
-                root.setUrl(sysPermission.getUrl());
-                menuList.add(root);
+        List<SysPermission> rootMenus = new ArrayList<>();
+        List<SysPermission> noRootList = new ArrayList<>();
+        for(SysPermission menu : allMenus) {
+            if(menu.getPid() == null) {
+                rootMenus.add(menu);
+            }
+            if(menu.getPid() != null &&
+                (actions.indexOf(menu.getPermissionName()) > -1) ||
+                    (StringUtils.isEmpty(menu.getPermissionName()) && menu.getType() == MenuType.PATH.getValue())
+            ) {
+                noRootList.add(menu);
             }
         }
 
-        for (SysPermission sysPermission : list) {
-            for (MenuRoot menuRoot : menuList) {
-                if (sysPermission.getPid() == menuRoot.getId()) {
-                    MenuChild menuChild = new MenuChild(sysPermission.getId(), sysPermission.getDescription(), sysPermission.getUrl());
-                    List<MenuChild> childList = menuRoot.getMenuChildList();
-                    childList.add(menuChild);
-                    menuRoot.setMenuChildList(childList);
+        getChildren(noRootList, allMenus);
+
+        filterMenu(rootMenus);
+
+        rootMenus.sort((Comparator.comparing(SysPermission::getPriority)));
+
+        return rootMenus;
+    }
+
+    @Override
+    public Map<String, Object> getAllMenu() {
+        List<SysPermission> allMenus = this.sysPermissionRepository.findAll();
+
+//        List<SysPermission> rootMenus = new ArrayList<>();
+//        List<SysPermission> noRootList = new ArrayList<>();
+//        for(SysPermission menu : allMenus) {
+//            if(menu.getPid() == null) {
+//                rootMenus.add(menu);
+//            }
+//            if(menu.getPid() != null) {
+//                noRootList.add(menu);
+//            }
+//        }
+//
+//        getChildren(noRootList, allMenus);
+//
+//        rootMenus.sort((Comparator.comparing(SysPermission::getPriority)));
+//
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("rows", allMenus);
+        map.put("total", allMenus.size());
+
+        return map;
+
+    }
+
+
+    /**
+     * 递归查找菜单的子节点
+     * @param noRootList
+     * @param children
+     * @return
+     */
+    public List<SysPermission> getChildren(List<SysPermission> noRootList, List<SysPermission> children) {
+        for(SysPermission child : children) {
+            List<SysPermission> grandsons = new ArrayList<>();
+            for (SysPermission noRoot : noRootList) {
+                if(child.getId().equals(noRoot.getPid())) {
+                    grandsons.add(noRoot);
+                }
+            }
+            if(grandsons.size() > 0) {
+                child.setChildren(getChildren(noRootList, grandsons));
+            }
+        }
+        children.sort((Comparator.comparing(SysPermission::getPriority)));
+
+        return children;
+    }
+
+
+    /**
+     * 清除没有子节点的菜单
+     * @param menus
+     * @return
+     */
+    public List<SysPermission> filterMenu(List<SysPermission> menus) {
+
+        Iterator<SysPermission> iterator = menus.iterator();
+
+        SysPermission menu = null;
+        while (iterator.hasNext()) {
+            menu = iterator.next();
+            if (menu.getType() == MenuType.PATH.getValue()) {
+                if (menu.getChildren() != null && menu.getChildren().size() > 0) {
+                    filterMenu(menu.getChildren());
+                } else {
+                    iterator.remove();
                 }
             }
         }
 
+        return menus;
 
     }
 

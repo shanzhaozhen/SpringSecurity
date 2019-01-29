@@ -28,7 +28,7 @@ public class UserDetailsUtils {
      */
     public static List<String> getActionsByLoginUser() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<String> resLst = new ArrayList<String>();
+        List<String> resLst = new ArrayList<>();
         for (GrantedAuthority granted : userDetails.getAuthorities()) {
             resLst.add(granted.getAuthority());
         }

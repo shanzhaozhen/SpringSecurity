@@ -4,7 +4,6 @@ import org.shanzhaozhen.springsecurity.admin.repository.SysPermissionRepository;
 import org.shanzhaozhen.springsecurity.admin.repository.SysUserRepository;
 import org.shanzhaozhen.springsecurity.bean.SysPermission;
 import org.shanzhaozhen.springsecurity.bean.SysUser;
-import org.shanzhaozhen.springsecurity.utils.NullUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
@@ -50,11 +49,10 @@ public class MyUserDetailsService implements UserDetailsService {
             //将数据库保存的权限存至登陆的账号里面
             List<SysPermission> sysPermissions = null;
             sysPermissions = sysPermissionRepository.findByUsername(username);
-            NullUtils.clearNull(sysPermissions);
             if (sysPermissions != null) {
-                Set<GrantedAuthority> grantedAuthorities = new HashSet<GrantedAuthority>();
+                Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
                 for (SysPermission sysPermission : sysPermissions) {
-                    grantedAuthorities.add(new SimpleGrantedAuthority(sysPermission.getName()));
+                    grantedAuthorities.add(new SimpleGrantedAuthority(sysPermission.getPermissionName()));
                 }
                 sysUser.setAuthorities(grantedAuthorities);
             }

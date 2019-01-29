@@ -7,6 +7,8 @@ import java.util.Set;
 @Table(name = "sys_role")
 public class SysRole extends BaseBean {
 
+    private static final long serialVersionUID = -232119212010132125L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -14,15 +16,16 @@ public class SysRole extends BaseBean {
     @Column(nullable = false)
     private String name;
 
+//    @ManyToMany(mappedBy = "sysRoles", cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable(name = "sys_user_role",
+    @JoinTable(name = "sys_users_roles",
             joinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}
     )
     private Set<SysUser> sysUsers;
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable(name = "sys_role_permission",
+    @JoinTable(name = "sys_roles_permissions",
         joinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "permission_id", referencedColumnName = "id")}
     )

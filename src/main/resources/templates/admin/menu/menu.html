@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>OldGod | 后台管理 - 菜单管理</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.min.css}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" th:href="@{/webjars/ionicons/2.0.1/css/ionicons.min.css}">
+    <!-- Theme style -->
+    <link rel="stylesheet" th:href="@{/webjars/AdminLTE/2.4.3/dist/css/AdminLTE.min.css}">
+    <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
+    page. However, you can choose any other skin. Make sure you
+    apply the skin class to the body tag so the changes take effect. -->
+    <link rel="stylesheet" th:href="@{/webjars/AdminLTE/2.4.3/dist/css/skins/skin-blue.min.css}">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <!-- Google Font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    <!-- 引入table-bootstrap样式 -->
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-table/1.13.2/dist/bootstrap-table.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/jquery-treegrid/0.3.0/css/jquery.treegrid.css}">
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+    <!-- Main Header -->
+    <div th:replace="~{/admin/common/public :: header}"></div>
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <!--(targetUrl = '/admin/index')-->
+    <div th:replace="~{/admin/common/public :: left-sidebar}"></div>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+    <h1>
+        菜单管理
+        <small>配置菜单权限还有跳转地址</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> 系统设置</a></li>
+        <li class="active">菜单管理</li>
+    </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-body">
+                        <div id="menu-toolbar">
+                            <button type="button" class="btn btn-block btn-info" id="menu-add">
+                                <i class="fa fa-plus"></i> 添加
+                            </button>
+                        </div>
+                        <table class="bootstrap-table" id="menu-grid"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal-add">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">添加菜单</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>One fine body&hellip;</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary">保存</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
+    </section>
+    <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Main Footer -->
+    <div th:replace="~{/admin/common/public :: footer}"></div>
+
+    <!-- Control Sidebar -->
+    <div th:replace="~{/admin/common/public :: control-sidebar}"></div>
+    <!-- /.control-sidebar -->
+
+    <!-- Add the sidebar's background. This div must be placed
+    immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- REQUIRED JS SCRIPTS -->
+
+    <!-- jQuery 3 -->
+    <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+    <!-- 展开菜单 -->
+    <script th:src="@{/js/menu.js}"></script>
+    <!-- Bootstrap 3.3.7 -->
+    <script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <!-- AdminLTE App -->
+    <script th:src="@{/webjars/AdminLTE/2.4.3/dist/js/adminlte.min.js}"></script>
+    <!-- Optionally, you can add Slimscroll and FastClick plugins.
+    Both of these plugins are recommended to enhance the
+    user experience. -->
+    <!--&lt;!&ndash; datatables.net 1.10.19  &ndash;&gt;-->
+    <!--<script th:src="@{/webjars/datatables.net/1.10.19/js/jquery.dataTables.js}"></script>-->
+    <!--&lt;!&ndash; datatables.net-bs 2.1.1 &ndash;&gt;-->
+    <!--<script th:src="@{/webjars/datatables.net-bs/2.1.1/js/dataTables.bootstrap.js}"></script>-->
+    <script th:src="@{/webjars/bootstrap-table/1.13.2/dist/bootstrap-table.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap-table/1.13.2/dist/locale/bootstrap-table-zh-CN.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap-table/1.13.2/dist/extensions/treegrid/bootstrap-table-treegrid.js}"></script>
+    <script th:src="@{/webjars/jquery-treegrid/0.3.0/js/jquery.treegrid.js}"></script>
+
+    <script>
+
+        var $table = $('#menu-grid');
+
+        $(function () {
+
+            $("#menu-add").click(function () {
+                $('#modal-add').modal();
+            });
+
+            window.operateEvents = {
+                'click .single_send': function (e, value, row, index) {
+                    var load = layer.load(1, {
+                        shade: [0.3,'#afafaf'] //0.1透明度的白色背景
+                    });
+
+                    $.ajax({
+                        url: '[[@{/accuratesinglesend}]]',
+                        type: 'POST',
+                        dataType: 'json',
+                        contentType : 'application/json;charset=utf-8',
+                        data: JSON.stringify(row),
+                        success: function(result) {
+                            if (result.success == true) {
+                                layer.close(load);
+                            }
+                            layer.alert(result.msg);
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown) {
+                            layer.msg("发送失败！");
+                        }
+                    });
+                }
+            };
+
+            $('#menu-grid').bootstrapTable({
+                url: '[[@{/admin/menus}]]',           //请求后台的URL（*）
+                method: 'GET',                     //请求方式（*）
+                dataType: 'json',
+                // contentType : "application/x-www-form-urlencoded",
+                toolbar: '#menu-toolbar',                //工具按钮用哪个容器
+                striped: true,                      //是否显示行间隔色
+                cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+                pagination: true,                   //是否显示分页（*）
+                // sortable: true,                     //是否启用排序
+                //sortOrder: "asc",                   //排序方式
+                sidePagination: "client",           //分页方式：client客户端分页，server服务端分页（*）
+                pageNumber: 1,                      //初始化加载第一页，默认第一页,并记录
+                pageSize: 10,                       //每页的记录行数（*）
+                pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+                // search: true,                       //是否显示表格搜索
+                // strictSearch: true,                 //设置为 true启用全匹配搜索，否则为模糊搜索
+                showColumns: true,                  //是否显示所有的列（选择显示的列）
+                showRefresh: true,                  //是否显示刷新按钮
+                minimumCountColumns: 2,             //最少允许的列数
+                clickToSelect: true,                //是否启用点击选中行
+                // height: 500,                      //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+                //uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
+                idField: 'id',                      //每行的标识
+                showToggle: true,                   //是否显示详细视图和列表视图的切换按钮
+                cardView: false,                    //是否显示详细视图
+                detailView: false,                  //是否显示父子表
+                //得到查询的参数
+                queryParams: function (params) {
+                    //这里的键的名字和控制器的变量名必须一致，这边改动，控制器也需要改成一样的
+                    // params['pageNumber'] = params.pageNumber;
+                    // params['pageSize'] = params.pageSize;
+                    params['keyword'] = params.searchText;
+                    return params;
+                },
+                responseHandler: function(data) {   //前端分页需要此返回数据结构
+                    return data.rows;
+                },
+                columns: [{
+                    field: 'name',
+                    title: '名称',
+                    width: '180'
+                }, {
+                    field: 'icon',
+                    title: '图标',
+                    width: '60',
+                    align: "center",
+                    formatter: iconFormatter
+                }, {
+                    field: 'type',
+                    title: '类型',
+                    width: '60'
+                }, {
+                    field: 'priority',
+                    title: '排序',
+                    width: '60'
+                }, {
+                    field: 'url',
+                    title: '跳转地址',
+                    width: '150'
+                }, {
+                    field: 'permissionName',
+                    title: '权限名称',
+                    width: '150'
+                }, {
+                    field:'id',
+                    title: '操作',
+                    width: 120,
+                    align: 'center',
+                    valign: 'middle',
+                    events: operateEvents,
+                    formatter: operateFormatter
+                }],
+                treeShowField: 'name',
+                parentIdField: 'pid',
+                onLoadSuccess: function(data) {
+                    $table.treegrid({
+                        treeColumn: 0,
+                        initialState: 'collapsed',// 所有节点都折叠
+                        // initialState: 'expanded',// 所有节点都展开，默认展开
+                        onChange: function() {
+                            $table.bootstrapTable('resetWidth')
+                        }
+                    })
+                }
+            });
+
+
+            function iconFormatter(value, row, index) {
+                return [
+                    '<i class="' + value + '"></i>'
+                ].join('');
+            }
+
+            function operateFormatter(value, row, index) {
+                return [
+                    '<div class="float-e-margins">' +
+                    '<button class="btn btn-xs btn-success updata" type="button"><i class="fa fa-edit"></i> 修改</button> ' +
+                    '<button class="btn btn-xs btn-danger delete" type="button"><i class="fa fa-close"></i> 删除</button> ' +
+                    '</div>'
+                ].join('');
+            }
+
+
+
+        });
+
+    </script>
+</body>
+</html>

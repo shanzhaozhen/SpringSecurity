@@ -1,5 +1,7 @@
 package org.shanzhaozhen.springsecurity.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
@@ -8,6 +10,8 @@ import java.util.Set;
 @Table(name = "sys_permission")
 public class SysPermission extends BaseBean {
 
+    private static final long serialVersionUID = 4485640590947953262L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -15,29 +19,32 @@ public class SysPermission extends BaseBean {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     private String permissionName;
 
     private String description;
 
-    //@Column(nullable = false)
+    private Integer type;
+
     private String url;
 
-    //@Column(nullable = false)
     private Integer pid;
 
-    @Column(columnDefinition = "int default 1")
-    private Integer order;
+    private String icon;
 
+//    @Column(columnDefinition = "int default 1")
+    private Integer priority;
+
+    //    @ManyToMany(mappedBy = "sysPermissions", cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable(name = "sys_role_permission",
+    @JoinTable(name = "sys_roles_permissions",
             joinColumns = {@JoinColumn(name = "permission_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
     )
+    @JsonIgnore
     private Set<SysRole> sysRoles;
 
     @Transient
-    private List<SysPermission> childrens;
+    private List<SysPermission> children;
 
     public Integer getId() {
         return id;
@@ -71,6 +78,14 @@ public class SysPermission extends BaseBean {
         this.description = description;
     }
 
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
     public String getUrl() {
         return url;
     }
@@ -87,12 +102,20 @@ public class SysPermission extends BaseBean {
         this.pid = pid;
     }
 
-    public Integer getOrder() {
-        return order;
+    public String getIcon() {
+        return icon;
     }
 
-    public void setOrder(Integer order) {
-        this.order = order;
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 
     public Set<SysRole> getSysRoles() {
@@ -103,11 +126,11 @@ public class SysPermission extends BaseBean {
         this.sysRoles = sysRoles;
     }
 
-    public List<SysPermission> getChildrens() {
-        return childrens;
+    public List<SysPermission> getChildren() {
+        return children;
     }
 
-    public void setChildrens(List<SysPermission> childrens) {
-        this.childrens = childrens;
+    public void setChildren(List<SysPermission> children) {
+        this.children = children;
     }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -36,6 +36,7 @@
   <div class="login-box-body">
     <p class="login-box-msg">Sign in to start your session</p>
     <p class="login-box-msg text-red" th:if="${param.error}" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}"></p>
+    <p class="login-box-msg text-green" th:if="${param.logout}" th:text="注销成功"></p>
     <form th:action="@{/login}" method="post">
       <div class="form-group has-feedback">
         <input type="text" name="username" class="form-control" placeholder="用户名" required>
@@ -49,7 +50,7 @@
         <div class="col-xs-8">
           <div class="checkbox icheck">
             <label>
-              <input type="checkbox" name="remeber"> 记住我
+              <input class="remember" type="checkbox" name="remember-me" checked="checked"> 记住我
             </label>
           </div>
         </div>
@@ -75,13 +76,15 @@
 <!-- iCheck -->
 <script th:src="@{/webjars/AdminLTE/2.4.3/plugins/iCheck/icheck.min.js}"></script>
 <script>
-  $(function () {
-    $('input').iCheck({
-      checkboxClass: 'icheckbox_square-blue',
-      radioClass: 'iradio_square-blue',
-      increaseArea: '20%' /* optional */
+
+    $(function () {
+        $('.remember').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' /* optional */
+        });
     });
-  });
+
 </script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -34,11 +34,12 @@
 <div class="wrapper">
 
   <!-- Main Header -->
-  <div th:replace="~{/admin/public :: header}"></div>
+  <div th:replace="~{/admin/common/public :: header}"></div>
 
 
   <!-- Left side column. contains the logo and sidebar -->
-  <div th:replace="~{/admin/public :: left-sidebar}"></div>
+  <!--(targetUrl = '/admin/index')-->
+  <div th:replace="~{/admin/common/public :: left-sidebar}"></div>
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -60,17 +61,17 @@
       <!--------------------------
         | Your Page Content Here |
         -------------------------->
-      <h1>进入index2</h1>
+      <h1>进入首页</h1>
     </section>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
 
   <!-- Main Footer -->
-  <div th:replace="~{/admin/public :: footer}"></div>
+  <div th:replace="~{/admin/common/public :: footer}"></div>
 
   <!-- Control Sidebar -->
-  <div th:replace="~{/admin/public :: control-sidebar}"></div>
+  <div th:replace="~{/admin/common/public :: control-sidebar}"></div>
   <!-- /.control-sidebar -->
 
   <!-- Add the sidebar's background. This div must be placed
@@ -83,6 +84,8 @@
 
 <!-- jQuery 3 -->
 <script th:src="@{/webjars/jquery/3.3.1/jquery.min.js}"></script>
+<!-- 展开菜单 -->
+<script th:src="@{/js/menu.js}"></script>
 <!-- Bootstrap 3.3.7 -->
 <script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
 <!-- AdminLTE App -->
@@ -91,5 +94,6 @@
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
      Both of these plugins are recommended to enhance the
      user experience. -->
+<script th:src="@{/js/menu.js}"></script>
 </body>
 </html>

@@ -1,17 +1,26 @@
 package org.shanzhaozhen.springsecurity.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private MyUserDetailsService myUserDetailsService;
+
+    @Autowired
+    private MySuccessHandler mySuccessHandler;
+
+//    @Autowired
+//    private MyFilterSecurityInterceptor myFilterSecurityInterceptor;
 
     /**
      * 定义认证规则
@@ -26,20 +35,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        super.configure(http);
         http
             .authorizeRequests()
-                .antMatchers("/", "/test1", "/test2", "/login", "/register/**", "/webjars/**").permitAll()
+                .antMatchers("/", "/login", "/register/**", "/druid/**", "/webjars/**", "upload", "/upload/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
                 .loginPage("/login")
-//                .permitAll()
-                .defaultSuccessUrl("/admin/index")
+                .permitAll()
 //                .failureUrl("login?error=true")
-//                .successHandler(new MySuccessHandler())
+                .defaultSuccessUrl("/admin/index")
+                .successHandler(mySuccessHandler)
                 .and()
             .logout()
-                .logoutSuccessUrl("/")
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
                 .and()
-//                .csrf().disable()
+            .csrf()
+                .ignoringAntMatchers("/druid/*", "/upload")
+                .and()
             .rememberMe()
         ;
 
@@ -59,4 +71,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+//        super.configure(web);
+        web.ignoring().antMatchers("/webjars/**");
+    }
 }

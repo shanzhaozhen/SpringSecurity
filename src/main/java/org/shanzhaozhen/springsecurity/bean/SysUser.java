@@ -10,11 +10,13 @@ import java.util.Set;
 @Table(name = "sys_user")
 public class SysUser extends BaseBean implements UserDetails {
 
+    private static final long serialVersionUID = 3064727069207896868L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 50)
     private String username;
 
     @Column(nullable = false)
@@ -36,11 +38,15 @@ public class SysUser extends BaseBean implements UserDetails {
     private boolean enabled;                    //是否被禁用,禁用的用户不能身份验证
 
     @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-    @JoinTable(name = "sys_user_role",
+    @JoinTable(name = "sys_users_roles",
         joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
     )
     private Set<SysRole> sysRoles;
+
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "sys_user_info_id",referencedColumnName="id", unique = true)
+    private SysUserInfo sysUserInfo;
 
     public Integer getId() {
         return id;
@@ -119,5 +125,13 @@ public class SysUser extends BaseBean implements UserDetails {
 
     public void setSysRoles(Set<SysRole> sysRoles) {
         this.sysRoles = sysRoles;
+    }
+
+    public SysUserInfo getSysUserInfo() {
+        return sysUserInfo;
+    }
+
+    public void setSysUserInfo(SysUserInfo sysUserInfo) {
+        this.sysUserInfo = sysUserInfo;
     }
 }

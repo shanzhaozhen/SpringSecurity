@@ -3,15 +3,21 @@ package org.shanzhaozhen.springsecurity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.shanzhaozhen.springsecurity.admin.repository.SysPermissionRepository;
+import org.shanzhaozhen.springsecurity.admin.repository.SysUserInfoRepository;
 import org.shanzhaozhen.springsecurity.admin.repository.SysUserRepository;
+import org.shanzhaozhen.springsecurity.admin.service.SysPermissionService;
 import org.shanzhaozhen.springsecurity.bean.SysPermission;
+import org.shanzhaozhen.springsecurity.bean.SysUser;
+import org.shanzhaozhen.springsecurity.bean.SysUserInfo;
 import org.shanzhaozhen.springsecurity.utils.ComparatorUtils;
 import org.shanzhaozhen.springsecurity.utils.NullUtils;
+import org.shanzhaozhen.springsecurity.utils.PasswordUtils;
 import org.shanzhaozhen.springsecurity.utils.UserDetailsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -24,7 +30,13 @@ public class SpringsecurityApplicationTests {
     private SysUserRepository sysUserRepository;
 
     @Autowired
+    private SysUserInfoRepository sysUserInfoRepository;
+
+    @Autowired
     private SysPermissionRepository sysPermissionRepository;
+
+    @Autowired
+    private SysPermissionService sysPermissionService;
 
     @Test
     public void contextLoads() {
@@ -74,61 +86,53 @@ public class SpringsecurityApplicationTests {
 
     }
 
-    @Test
-    public void menusTest() {
-        //List<String> actions = UserDetailsUtils.getActionsByLoginUser();
-        List<SysPermission> allMenus = this.sysPermissionRepository.findAll();
 
-        List<SysPermission> rootMenus = new ArrayList<SysPermission>();
-        Map<Integer, SysPermission> maps = new IdentityHashMap<Integer, SysPermission>();
-        for(SysPermission menu : allMenus) {
-            if(menu.getPid() != null) {
-                maps.put(menu.getPid(), menu);
-            }
-        }
-        for (SysPermission menu : allMenus) {
-            if(menu.getPid() == null) {
-                rootMenus.add(menu);
-            }
-            List<SysPermission> children = new ArrayList<SysPermission>();
-            for (Map.Entry<Integer, SysPermission> entry : maps.entrySet()) {
-                if(menu.getId().equals(entry.getKey())){
-                    children.add(entry.getValue());
-                }
-            }
-            if(children.size() > 0) {
-                subClass(maps, rootMenus, children);
-                menu.setChildrens(children);
-            }
-        }
-        List<SysPermission> filterHms = new ArrayList<SysPermission>();
-        for (SysPermission menu : rootMenus) {
-            //控制父级有权限才遍历
-            if(menu.getChildrens().size() > 0) {
-                filterHms.add(menu);
-            }
-        }
-        Collections.sort(filterHms, new ComparatorUtils());
-//        return JsonUtil.toString(filterHms);
+    @Test
+    public void testMenus() {
+        sysPermissionService.getMenu();
+
     }
 
-    /**
-     * 递归查找子分类节点.
-     */
-    private List<SysPermission> subClass(Map<Integer, SysPermission> maps, List<SysPermission> rootMenus, List<SysPermission> children) {
-        for(SysPermission child : children) {
-            List<SysPermission> grandsons = new ArrayList<SysPermission>();
-            for (Map.Entry<Integer, SysPermission> entry : maps.entrySet()) {
-                if(child.getId().equals(entry.getKey())) {
-                    grandsons.add(entry.getValue());
-                }
-            }
-            if(grandsons.size() > 0) {
-                subClass(maps, rootMenus, grandsons);
-            }
-            Collections.sort(children, new ComparatorUtils());
+    @Test
+    public void testUserInfoSave() {
+        SysUser newUser = new SysUser();
+        newUser.setUsername("test1");
+        newUser.setPassword(PasswordUtils.encryption("123456"));
+        newUser.setAccountNonExpired(false);
+        newUser.setAccountNonLocked(true);
+        newUser.setCredentialsNonExpired(true);
+        newUser.setEnabled(true);
+
+        newUser.setSysUserInfo(new SysUserInfo());
+        sysUserRepository.save(newUser);
+    }
+
+    @Test
+    public void testGetUserInfo() {
+        SysUser sysUser = sysUserRepository.findSysUserById(2);
+        SysUserInfo one = sysUserInfoRepository.findSysUserInfoById(2);
+        SysUserInfo two = sysUserInfoRepository.findSysUserInfoById(3);
+
+        sysUser.setSysUserInfo(one);
+
+        sysUserRepository.save(sysUser);
+
+        System.out.println(sysUser);
+    }
+
+    @Test
+    public void testFile() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int day = calendar.get(Calendar.DATE);
+
+        String savePath = "C:/devFile/" + new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+        File file = new File(savePath);
+        if (!file.exists()) {
+            file.mkdir();
         }
-        return rootMenus;
     }
 
 

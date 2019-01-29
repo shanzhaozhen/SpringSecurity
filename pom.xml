@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.5.RELEASE</version>
+        <version>2.1.2.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -43,10 +43,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf-extras-springsecurity4</artifactId>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
         </dependency>
-
 
         <!--spring-boot-devtools 热部署模块-->
         <dependency>
@@ -67,9 +66,15 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
-            <version>1.1.10</version>
+            <version>1.1.12</version>
         </dependency>
 
+        <!--&lt;!&ndash; fastjson 1.2.56 &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>com.alibaba</groupId>-->
+            <!--<artifactId>fastjson</artifactId>-->
+            <!--<version>1.2.56</version>-->
+        <!--</dependency>-->
 
         <!--引入bootstrap主题包-->
         <dependency>
@@ -97,6 +102,34 @@
             <groupId>org.webjars.bower</groupId>
             <artifactId>jquery-validation</artifactId>
             <version>1.18.0</version>
+        </dependency>
+
+        <!--&lt;!&ndash;引入jquery的datatables&ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.webjars.bower</groupId>-->
+            <!--<artifactId>datatables.net</artifactId>-->
+            <!--<version>1.10.19</version>-->
+        <!--</dependency>-->
+
+        <!--&lt;!&ndash;引入jquery的datatables的bootstrap风格&ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.webjars.bower</groupId>-->
+            <!--<artifactId>datatables.net-bs</artifactId>-->
+            <!--<version>2.1.1</version>-->
+        <!--</dependency>-->
+
+        <!-- bootstrap-table 1.13.1 -->
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>bootstrap-table</artifactId>
+            <version>1.13.2</version>
+        </dependency>
+
+        <!-- jquery-treegrid 0.3.0 树状表格插件 -->
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>jquery-treegrid</artifactId>
+            <version>0.3.0</version>
         </dependency>
 
         <!--引入layer模态框-->

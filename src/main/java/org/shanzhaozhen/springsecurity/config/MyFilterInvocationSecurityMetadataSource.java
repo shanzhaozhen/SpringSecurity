@@ -32,13 +32,13 @@ public class MyFilterInvocationSecurityMetadataSource implements FilterInvocatio
      * 此方法用来将所有权限存至resourceMap，供给getAttributes判断
      */
     public void loadResourceDefine() {
-        resourceMap = new HashMap<String, Collection<ConfigAttribute>>();
-        List<SysPermission> sysPermissions = sysPermissionRepository.findAll();
+        resourceMap = new HashMap<>();
+        List<SysPermission> sysPermissions = sysPermissionRepository.findSysPermissionsByPermissionNameIsNotNull();
         for (SysPermission sysPermission : sysPermissions) {
-            Collection<ConfigAttribute> configAttributes = new ArrayList<ConfigAttribute>();
+            Collection<ConfigAttribute> configAttributes = new ArrayList<>();
             //此处只添加了用户的名字，其实还可以添加更多权限的信息，例如请求方法到ConfigAttribute的集合中去。
             //此处添加的信息将会作为MyAccessDecisionManager类的decide的第三个参数
-            configAttributes.add(new SecurityConfig(sysPermission.getName()));
+            configAttributes.add(new SecurityConfig(sysPermission.getPermissionName()));
             resourceMap.put(sysPermission.getUrl(), configAttributes);
         }
     }
@@ -50,9 +50,11 @@ public class MyFilterInvocationSecurityMetadataSource implements FilterInvocatio
      */
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
+
         if (resourceMap == null) {
             this.loadResourceDefine();
         }
+
         //取出拦截的 object 对象中包含用户的 request 请求信息
         HttpServletRequest httpRequest = ((FilterInvocation) object).getHttpRequest();
         AntPathRequestMatcher antPathRequestMatcher;
@@ -72,7 +74,7 @@ public class MyFilterInvocationSecurityMetadataSource implements FilterInvocatio
             return nullPermission;
 
             //防止数据库中没有数据，不能进行权限拦截
-            if(collection.size()<1) {
+            if(collection.size() < 1) {
                 ConfigAttribute configAttribute = new SecurityConfig("ROLE_NO_USER");
                 collection.add(configAttribute);
             }
@@ -81,6 +83,10 @@ public class MyFilterInvocationSecurityMetadataSource implements FilterInvocatio
         return null;
     }
 
+    /**
+     * getAllConfigAttributes 方法如果返回了所有定义的权限资源，Spring Security会在启动时校验每个ConfigAttribute是否配置正确，不需要校验直接返回null。
+     * @return
+     */
     @Override
     public Collection<ConfigAttribute> getAllConfigAttributes() {
         return null;

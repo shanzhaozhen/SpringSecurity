@@ -1,7 +1,9 @@
 package org.shanzhaozhen.springsecurity.service.impl;
 
+import org.shanzhaozhen.springsecurity.admin.repository.SysUserInfoRepository;
 import org.shanzhaozhen.springsecurity.admin.repository.SysUserRepository;
 import org.shanzhaozhen.springsecurity.bean.SysUser;
+import org.shanzhaozhen.springsecurity.bean.SysUserInfo;
 import org.shanzhaozhen.springsecurity.service.RegisterService;
 import org.shanzhaozhen.springsecurity.utils.MessageUtils;
 import org.shanzhaozhen.springsecurity.utils.NullUtils;
@@ -19,6 +21,9 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Autowired
     private SysUserRepository sysUserRepository;
+
+    @Autowired
+    private SysUserInfoRepository sysUserInfoRepository;
 
     @Override
     @Modifying
@@ -41,6 +46,7 @@ public class RegisterServiceImpl implements RegisterService {
         newUser.setAccountNonLocked(true);
         newUser.setCredentialsNonExpired(true);
         newUser.setEnabled(true);
+        newUser.setSysUserInfo(new SysUserInfo());
         sysUserRepository.save(newUser);
         return MessageUtils.resultSuccessMessage("注册成功，等待管理员通过审核！");
     }

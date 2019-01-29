@@ -8,16 +8,14 @@ public class ComparatorUtils implements Comparator<SysPermission> {
 
     @Override
     public int compare(SysPermission o1, SysPermission o2) {
-        if(o1.getOrder() == null || o2.getOrder() == null) {
+        if(o1.getPriority() == null || o2.getPriority() == null) {
             return 0;
         }
-        if (o1.getOrder() > o2.getOrder()) {
+        if (o1.getPriority() > o2.getPriority()) {
             return 1;
-        }
-        else if (o1.getOrder() < o2.getOrder()) {
+        } else if (o1.getPriority() < o2.getPriority()) {
             return -1;
-        }
-        else {
+        } else {
             return 0;
         }
     }
